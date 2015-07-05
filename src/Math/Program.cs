@@ -9,9 +9,10 @@ namespace Math
     {
         public void Main(string[] args)
         {
+            
             string operation = "add";
             int x, y, z = 0;
-            int biggestNumber = 20, rightAnswers = 0, wrongAnswers = 0, totalQuestions = 0;
+            int biggestNumber = 30, gameTime = 120, elapsedSeconds = 0, rightAnswers = 0, wrongAnswers = 0, totalQuestions = 0; 
 
             Random rnd = new Random();
 
@@ -26,6 +27,7 @@ namespace Math
 
 
             Console.WriteLine("type stop when you are done");
+            DateTime start = DateTime.Now;
 
             x = rnd.Next(1, biggestNumber + 1);
             y = rnd.Next(1, biggestNumber + 1);
@@ -57,6 +59,15 @@ namespace Math
 
                     rightAnswers = rightAnswers + 1;
 
+                    elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                    if (elapsedSeconds > gameTime)
+                    {
+                        Console.WriteLine("Time's Up!");
+                        
+                        showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
+                        break;
+                    }
+
                     x = rnd.Next(1, biggestNumber);
                     y = rnd.Next(1, biggestNumber);
 
@@ -70,15 +81,19 @@ namespace Math
                 {
                     operation = "subtract";
                 }
-                else if (response == "score")
+                else if (response == string.Empty)
                 {
-                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions);
+                    decimal elapsedTime = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
                 }
                 else if((response == "stop") ||
                     (response == "quit") ||
                     (response == "end"))
                 {
-                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions);
+                    decimal elapsedTime = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
+                    Console.WriteLine("Press Enter.");
+                    Console.ReadLine();
                     break;
                 }
                 else
@@ -89,13 +104,13 @@ namespace Math
             }
         }
 
-        private void showCurrentScore(int rightAnswers, int wrongAnswers, int totalQuestions)
+        private void showCurrentScore(int rightAnswers, int wrongAnswers, int totalQuestions, int elapsedSeconds)
         {
+            TimeSpan elapsedTime = new TimeSpan(0,0,elapsedSeconds);
             Console.WriteLine("Out of a total of {0} questions", totalQuestions.ToString());
-            Console.WriteLine("You have {0} right answers and {1} wrong answers.", rightAnswers.ToString(), wrongAnswers.ToString());
+            Console.WriteLine("You have {0} right answers and {1} wrong answers in {2} minutes and {3} seconds.", rightAnswers.ToString(), wrongAnswers.ToString(), elapsedTime.Minutes, elapsedTime.Seconds);
             calculateScore(rightAnswers, wrongAnswers);
-            Console.WriteLine("Press any key.");
-            Console.ReadLine();
+            Console.WriteLine();
         }
 
         private void calculateScore(decimal rightAnswers, decimal wrongAnswers)
