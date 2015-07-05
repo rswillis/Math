@@ -16,7 +16,9 @@ namespace Math
 
             Random rnd = new Random();
 
-            Console.WriteLine("please tell me if you would like to add or subtract");
+            Console.WriteLine("You have {0} seconds to answer as many questions as you can", gameTime);
+            Console.WriteLine("or you can type stop when you are done");
+            Console.WriteLine("The clock starts when you tell me if you would like to add or subtract:");
             operation = Console.ReadLine().ToLower(); 
 
             while(!((operation == "add") || (operation == "subtract")))
@@ -26,7 +28,6 @@ namespace Math
             }
 
 
-            Console.WriteLine("type stop when you are done");
             DateTime start = DateTime.Now;
 
             x = rnd.Next(1, biggestNumber + 1);
@@ -63,8 +64,9 @@ namespace Math
                     if (elapsedSeconds > gameTime)
                     {
                         Console.WriteLine("Time's Up!");
-                        
                         showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
+                        Console.WriteLine("Press Enter.");
+                        Console.ReadLine();
                         break;
                     }
 
@@ -83,14 +85,14 @@ namespace Math
                 }
                 else if (response == string.Empty)
                 {
-                    decimal elapsedTime = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                    elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
                     showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
                 }
                 else if((response == "stop") ||
                     (response == "quit") ||
                     (response == "end"))
                 {
-                    decimal elapsedTime = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                    elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
                     showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
                     Console.WriteLine("Press Enter.");
                     Console.ReadLine();
@@ -116,6 +118,7 @@ namespace Math
         private void calculateScore(decimal rightAnswers, decimal wrongAnswers)
         {
             decimal totalAttempts = rightAnswers + wrongAnswers;
+            //todo: divide by zero error
             var percentage = System.Math.Round(((rightAnswers / totalAttempts) * 100), 2);
             string letterGrade = null;
 
