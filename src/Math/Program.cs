@@ -32,7 +32,7 @@ namespace Math
 
             x = rnd.Next(1, biggestNumber + 1);
             y = rnd.Next(1, biggestNumber + 1);
-            totalQuestions = 1;
+            totalQuestions = 0;
 
 
             while (true)
@@ -58,6 +58,7 @@ namespace Math
                 {
                     Console.WriteLine("Correct!");
 
+                    totalQuestions = totalQuestions + 1;
                     rightAnswers = rightAnswers + 1;
 
                     elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
@@ -73,7 +74,6 @@ namespace Math
                     x = rnd.Next(1, biggestNumber);
                     y = rnd.Next(1, biggestNumber);
 
-                    totalQuestions = totalQuestions + 1;
                 }
                 else if (response == "add")
                 {
