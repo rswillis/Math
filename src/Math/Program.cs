@@ -66,18 +66,19 @@ namespace Math
                 {
                     operation = "add";
                 }
-                else if(response == "subtract")
+                else if (response == "subtract")
                 {
                     operation = "subtract";
+                }
+                else if (response == "score")
+                {
+                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions);
                 }
                 else if((response == "stop") ||
                     (response == "quit") ||
                     (response == "end"))
                 {
-                    Console.WriteLine("Out of a total of {0} questions", totalQuestions.ToString());
-                    Console.WriteLine("You had {0} right answers and {1} wrong answers.", rightAnswers.ToString(), wrongAnswers.ToString());
-                    calculateScore(rightAnswers, wrongAnswers);
-                    Console.ReadLine();
+                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions);
                     break;
                 }
                 else
@@ -86,6 +87,15 @@ namespace Math
                     wrongAnswers = wrongAnswers + 1;
                 }
             }
+        }
+
+        private void showCurrentScore(int rightAnswers, int wrongAnswers, int totalQuestions)
+        {
+            Console.WriteLine("Out of a total of {0} questions", totalQuestions.ToString());
+            Console.WriteLine("You have {0} right answers and {1} wrong answers.", rightAnswers.ToString(), wrongAnswers.ToString());
+            calculateScore(rightAnswers, wrongAnswers);
+            Console.WriteLine("Press any key.");
+            Console.ReadLine();
         }
 
         private void calculateScore(decimal rightAnswers, decimal wrongAnswers)
