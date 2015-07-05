@@ -42,8 +42,8 @@ namespace Math
                 else if (operation == "subtract")
                 {
                     //make sure subtraction can't go into negative numbers
-                    if (x > y)
-                        swap(x, y);
+                    if (y > x)
+                        swap(ref x, ref y);
 
                     Console.WriteLine("{0} - {1}", x, y);
                     z = x - y;
@@ -124,7 +124,7 @@ namespace Math
             Console.WriteLine("Your score was {0} - {1}", percentage.ToString(), letterGrade);
         }
 
-        private void swap(int x, int y)
+        private void swap(ref int x, ref int y)
         {
             var t = x;
             x = y;
