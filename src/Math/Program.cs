@@ -9,99 +9,109 @@ namespace Math
     {
         public void Main(string[] args)
         {
-            
-            string operation = "add";
+            bool playAgain = true;
+            string operation = "add", response = string.Empty;
             int x, y, z = 0;
             int biggestNumber = 30, gameTime = 120, elapsedSeconds = 0, rightAnswers = 0, wrongAnswers = 0, totalQuestions = 0; 
 
             Random rnd = new Random();
 
-            Console.WriteLine("You have {0} seconds to answer as many questions as you can", gameTime);
-            Console.WriteLine("or you can type stop when you are done");
-            Console.WriteLine("The clock starts when you tell me if you would like to add or subtract:");
-            operation = Console.ReadLine().ToLower(); 
-
-            while(!((operation == "add") || (operation == "subtract")))
+            while (playAgain)
             {
-                Console.WriteLine("please tell me if you would like to add or subtract");
+                Console.WriteLine("You have {0} seconds to answer as many questions as you can", gameTime);
+                Console.WriteLine("or you can type stop when you are done");
+                Console.WriteLine("The clock starts when you tell me if you would like to add or subtract:");
                 operation = Console.ReadLine().ToLower();
-            }
 
-
-            DateTime start = DateTime.Now;
-
-            x = rnd.Next(1, biggestNumber + 1);
-            y = rnd.Next(1, biggestNumber + 1);
-            totalQuestions = 0;
-
-
-            while (true)
-            {
-                if (operation == "add")
+                while (!((operation == "add") || (operation == "subtract")))
                 {
-                    Console.WriteLine("{0} + {1}", x, y);
-                    z = x + y;
-                }
-                else if (operation == "subtract")
-                {
-                    //make sure subtraction can't go into negative numbers
-                    if (y > x)
-                        swap(ref x, ref y);
-
-                    Console.WriteLine("{0} - {1}", x, y);
-                    z = x - y;
+                    Console.WriteLine("please tell me if you would like to add or subtract");
+                    operation = Console.ReadLine().ToLower();
                 }
 
-                var response = Console.ReadLine().ToLower();
 
-                if (response == z.ToString())
+                DateTime start = DateTime.Now;
+
+                x = rnd.Next(1, biggestNumber + 1);
+                y = rnd.Next(1, biggestNumber + 1);
+                totalQuestions = 0;
+
+
+                while (true)
                 {
-                    Console.WriteLine("Correct!");
-
-                    totalQuestions = totalQuestions + 1;
-                    rightAnswers = rightAnswers + 1;
-
-                    elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
-                    if (elapsedSeconds > gameTime)
+                    if (operation == "add")
                     {
-                        Console.WriteLine("Time's Up!");
-                        showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
-                        Console.WriteLine("Press Enter.");
-                        Console.ReadLine();
-                        break;
+                        Console.WriteLine("{0} + {1}", x, y);
+                        z = x + y;
+                    }
+                    else if (operation == "subtract")
+                    {
+                        //make sure subtraction can't go into negative numbers
+                        if (y > x)
+                            swap(ref x, ref y);
+
+                        Console.WriteLine("{0} - {1}", x, y);
+                        z = x - y;
                     }
 
-                    x = rnd.Next(1, biggestNumber);
-                    y = rnd.Next(1, biggestNumber);
+                    response = Console.ReadLine().ToLower();
 
+                    if (response == z.ToString())
+                    {
+                        Console.WriteLine("Correct!");
+
+                        totalQuestions = totalQuestions + 1;
+                        rightAnswers = rightAnswers + 1;
+
+                        elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                        if (elapsedSeconds > gameTime)
+                        {
+                            Console.WriteLine("Time's Up!");
+                            break;
+                        }
+
+                        x = rnd.Next(1, biggestNumber + 1);
+                        y = rnd.Next(1, biggestNumber + 1);
+
+                    }
+                    else if (response == "add")
+                    {
+                        operation = "add";
+                    }
+                    else if (response == "subtract")
+                    {
+                        operation = "subtract";
+                    }
+                    else if (response == string.Empty)
+                    {
+                        elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                        showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
+                    }
+                    else if ((response == "stop") ||
+                        (response == "quit") ||
+                        (response == "end"))
+                    {
+
+                        break;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Try Again");
+                        wrongAnswers = wrongAnswers + 1;
+                    }
                 }
-                else if (response == "add")
+
+                elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
+                showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
+                Console.WriteLine("Would you like to play again?");
+                response = Console.ReadLine().ToLower();
+                playAgain = false;
+                if ((response == "yes") || (response == "y"))
                 {
-                    operation = "add";
-                }
-                else if (response == "subtract")
-                {
-                    operation = "subtract";
-                }
-                else if (response == string.Empty)
-                {
-                    elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
-                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
-                }
-                else if((response == "stop") ||
-                    (response == "quit") ||
-                    (response == "end"))
-                {
-                    elapsedSeconds = (int)DateTime.Now.Subtract(start).TotalSeconds;
-                    showCurrentScore(rightAnswers, wrongAnswers, totalQuestions, elapsedSeconds);
-                    Console.WriteLine("Press Enter.");
-                    Console.ReadLine();
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Try Again");
-                    wrongAnswers = wrongAnswers + 1;
+                    rightAnswers = 0;
+                    wrongAnswers = 0;
+                    totalQuestions = 0;
+                    playAgain = true;
                 }
             }
         }
