@@ -11,8 +11,8 @@ namespace Math
         {
             bool playAgain = true;
             string operation = "add", response = string.Empty;
-            int x, y, z = 0;
-            int biggestNumber = 30, gameTime = 120, elapsedSeconds = 0, rightAnswers = 0, wrongAnswers = 0, totalQuestions = 0; 
+            int x, y, z = 0, r = 0;
+            int biggestNumber = 10, gameTime = 120, elapsedSeconds = 0, rightAnswers = 0, wrongAnswers = 0, totalQuestions = 0; 
 
             Random rnd = new Random();
 
@@ -20,12 +20,12 @@ namespace Math
             {
                 Console.WriteLine("You have {0} seconds to answer as many questions as you can", gameTime);
                 Console.WriteLine("or you can type stop when you are done");
-                Console.WriteLine("The clock starts when you tell me if you would like to add or subtract:");
+                Console.WriteLine("The clock starts when you tell me if you would like to add, subtract, multiply, or divide:");
                 operation = Console.ReadLine().ToLower();
 
-                while (!((operation == "add") || (operation == "subtract")))
+                while (!((operation == "add") || (operation == "subtract") || (operation == "multiply") || (operation == "divide")))
                 {
-                    Console.WriteLine("please tell me if you would like to add or subtract");
+                    Console.WriteLine("please tell me if you would like to add, subtract, multiply, or divide:");
                     operation = Console.ReadLine().ToLower();
                 }
 
@@ -53,10 +53,29 @@ namespace Math
                         Console.WriteLine("{0} - {1}", x, y);
                         z = x - y;
                     }
+                    else if (operation == "multiply")
+                    {
+                        Console.WriteLine("{0} * {1}", x, y);
+                        z = x * y;
+                    }
+                    else if (operation == "divide")
+                    {
+                        //make sure subtraction can't go into negative numbers
+                        if (y > x)
+                            swap(ref x, ref y);
+
+                        Console.WriteLine("{0} / {1}", x, y);
+                        z = x / y;
+                        r = x % y;
+                    }
+
+
 
                     response = Console.ReadLine().ToLower();
 
-                    if (response == z.ToString())
+                    if ((operation != "divide" && (response == z.ToString()))
+                        || (operation == "divide" && (r == 0) && (response == z.ToString()))
+                        || (operation == "divide" && (r > 0) && (response.ToLower() == z.ToString() + 'r' + r.ToString())))
                     {
                         Console.WriteLine("Correct!");
 
@@ -81,6 +100,14 @@ namespace Math
                     else if (response == "subtract")
                     {
                         operation = "subtract";
+                    }
+                    else if (response == "multiply")
+                    {
+                        operation = "multiply";
+                    }
+                    else if (response == "divide")
+                    {
+                        operation = "divide";
                     }
                     else if (response == string.Empty)
                     {
